@@ -1,0 +1,110 @@
+name: Importar site
+on:
+  push:
+    paths:
+      - ".github/workflows/importar-site.yml"
+permissions:
+  contents: write
+jobs:
+  importar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Baixar, conferir e salvar os arquivos do site
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -uo pipefail
+          B="https://871c5efc-d759-46c7-8b02-daba08b68123.frame.claudeusercontent.com"
+          V="1794849832-0f94"
+          cat > "$RUNNER_TEMP/lista.txt" <<'LISTA'
+          701e11170005dcdd300bd499e3d0e8a21f01beeb7fabb75914812a232415c366 fotos/design-sorriso.jpg
+          5181c701c7cc0b3e9610962976bc4095b912b86c98bd3e02d9bd155d1011c633 fotos/foto-01.jpg
+          1af945cdd5bd034cd4fb3b40529e26a4bfa054c0e51b374afd03ca15174cbbbe fotos/foto-02.jpg
+          73f55b5ec3e850065d707616530528e90d6ebb6174b2aa52afcec6d08ecd1a9d fotos/foto-03.jpg
+          94b3898ebccfe14db3bb693f458420ce54709824b1cdb033d277e166e8ff34f7 fotos/foto-04.jpg
+          b846349a752b7fe86668317c81c155b529eacf4bef4db18a8cd5d7af88f7acc5 fotos/foto-05.jpg
+          cd7794e5c527fd8744cd31f7f9e2bee0af0fce900424b3cc352cdb69e6941e6b fotos/foto-06.jpg
+          095e484fe7eb3ebeb8009cae391018629604454f9779242529fc9838303e1825 fotos/foto-07.jpg
+          095b54d4f0085fc64eeb688912532eadcf6d0891180a94831c3311aebb907865 fotos/foto-08.jpg
+          87c204d27a43afd084931143c8d4df63805f276f89c5e7b2b04a5ec47157f8ac fotos/foto-09.jpg
+          704e3d57c92e6c3bb6eb23aa642ddcd392b3dd1db5b192ce633ca9522841b867 fotos/foto-10.jpg
+          671b41312e9f5ba2de73751f036bb04570e787abb59af12fc23804cec4493547 fotos/foto-11.jpg
+          b80019d14061b5b9040036986d26c831ade094b89f546319493cf2097ad08951 fotos/foto-12.jpg
+          a875d86dfba5ad70b8cdc64437f58b07c3e4d0120c83dc06c15f25782eb79503 fotos/foto-13.jpg
+          4d5a9ccde40748bb209806559e6539e6a98e829b9c3c4da818fe22ebae5b02ac fotos/foto-14.jpg
+          d80e631b4614eda4b8aedc93403c335039b38fe766b0732f61d48d1df9420294 fotos/foto-15.jpg
+          38a58acc35e403171bea0b6d059bd8e2a57f60f4bd934f4c8c596eb56a9c7ecf fotos/foto-16.jpg
+          fea05fd0498d5cd57e79c831ace18ada4ef3032d1fc33ca2f819efbb42449f77 fotos/foto-17.jpg
+          ee869fa4e127c29bb935f659374767ec6fc1705c3a1c63f1e6d1dd1685c23c07 fotos/foto-18.jpg
+          5d9ae06e68c0542b0e875b0fca91085ca01445c390282abc37ed002898683858 fotos/foto-19.jpg
+          07eb32c219b32881b3ee624cfb0f1861e9885f1c558891ac11451ef593f0ac4e fotos/foto-20.jpg
+          5d651a41254920f8a39d57eccea5db7a6ed6691393d42065f97a3f9b8d295b36 fotos/foto-21.jpg
+          b25123a47e38cb0adadd3433626f5f924e2d6ceccb462d5753b3fed91c715430 fotos/foto-22.jpg
+          cd3a0e69ef2df2be72e22cf75c67fefd059fb61d403359552dc24bee50b8886d fotos/foto-23.jpg
+          0f588d57055fbe8e6b1221300ca5a39449acf71b33419a9e6f1d8bda1120bd40 fotos/fotografia-retrato.jpg
+          dc6124a5930c54c3c18cb2a1a1d745147d658fedb01f22098af719dc9a55c51a fotos/hero-retrato.jpg
+          1884ca59169f68e4e57116705b64cf47aa4d0325794c2094b8d6800f47be0e64 fotos/lancel-1.jpg
+          b6c815fffada4e9655fbeec34cfd3746bc5b953a8b7b4173305d73509792690b fotos/lancel-2.jpg
+          f18841cfd76000992a61045994c19e0e1c52e737a275addcb651dfb93c5e9d15 fotos/lancel-3.jpg
+          728207664b2059798ccc5472317e46ee25193ace01d57e76b86c3c7175b2cf17 fotos/lancel-4.jpg
+          b5da6ecf706feaff3186b970dc8b2c86b8fe54dfc5a55a8d61ae6977f3da35af fotos/lancel-5.jpg
+          4e822312b4a3e3625baea741c593f059c948d868bd2d6868ab018be6b15622dc fotos/servico-design-sorriso.jpg
+          d1b736e1f505d833f8e5d5c9ddc7e1895fbf68587363cfa9881e15989430c6b2 fotos/servico-social-media.jpg
+          a436bd43749468b28636a65c8f53a7cc4df2458af4fe3962084825c47dc7f605 fotos/servico-storymaker.jpg
+          5a56c5e932e37070c0afa80539f4e1deffa6119cc4ac6955464f8a595d676639 fotos/servico-videomaker.jpg
+          2c69c9b7403d7ae0a899acf6dc40999cb4a0a5f7829f3724b051cdea78fd295a fotos/sobre-retrato.jpg
+          6e28f2e376317e19533bb8f9a7eec6f7d5c2eee254fee816b2f3557c96dfc1e1 index.html
+          4964a7792f911ce30364fda8752c1d4d188f7504693097ca45cec4234023ca03 videos/video-01.jpg
+          0f52260d6d0b59eae71928508c63c85f8c38e85a59def76eac3466183b8e8973 videos/video-01.mp4 bafd0990669a71c7f8e85111e235b009
+          4fc6a05dca68c33e3f4fde90596adfea154a29ff3d2f94b2600baf848e05d148 videos/video-02.jpg
+          6e895c22d26e16cf1cf1e76e3b7485851ebaf7d42f5e52e694882684f54718ca videos/video-02.mp4 d279f325c1f2021d6218f9c4c31f4263
+          a6a1048c2c991710e5a1a1a89b4f12d6c0e663e471e8dfe6530a5b626dabd4ee videos/video-03.jpg
+          e798a878a34a982e7003d097b953fe17ece6f326cf1ff76b3f4b625049efe5d0 videos/video-03.mp4 5e34fd0b0f8bd60859aff51767a09d93
+          1bb735c622489d409b2f89b2dbab1efd5b7f9c8c439cc870c5f1bb7300e0fbaf videos/video-04.jpg
+          5bf245c23c6d25032f805725d9aa30c7c1365f6aa2788ec16641bbc7ace9409a videos/video-04.mp4 9d20f19fe58a7507ead13a2028b87abe
+          7dbd677395ba6ffe51c874fa8ed3ea2e6abf7b97c26670388abd945b7c26a8e6 videos/video-05.jpg
+          7c3db497939556e99694496d67100bdc2aece7783c2f97a105642fb39a304c49 videos/video-05.mp4 3b410b6f0e173dd351f862f54d2c2efa
+          beead70f053eb214ddc0b031856d6329f3bef489e6191af6a7f9fd9119fcab8e videos/video-06.jpg
+          b267fbe596532b04f3006445db264f4441ab2c19ad96692c7867e1547b353bf9 videos/video-06.mp4 bbed4f8fd37cf5409cc6c3a6bbb27f9e
+          dd01a9f38f34110809a5431bf48e43347490d29c7a9b0e466f6dcfb9f1cb6432 videos/video-07.jpg
+          f793551bf49d1fe71509e2f7c5ce37941a09a376b54d51f2784a10a5bb5cbdc0 videos/video-07.mp4 cd8f6a3f1cea7bf32f60f669b8b2d45c
+          95197df04db7b9e1f3542024342ff77ad74fe6c116358a23a7941aabef16e534 videos/video-08.jpg
+          68596e3f4863b34f7696a246607a60811588519abd1382aed0d59ce9fc7db473 videos/video-08.mp4 9fa365ac99cf3ba250c450e32fea7e2e
+          2e8da8ee8d996d3610ad5b51a84fdbe865b5d61d61f67990fda570ee998da106 videos/video-debutante.jpg
+          a5b8fbc65d7ca0bc5e00a207d7c42f1994d143c1558c1e873e7c958b35b5ed58 videos/video-debutante.mp4 7b06e4098a36effd84237d8f51f90ecb
+          LISTA
+          fail=0
+          while read -r sum path blob; do
+            [ -z "$sum" ] && continue
+            src="$B/_f/$V/$path"
+            [ "$path" = "index.html" ] && src="$B/_f/$V/export/index.html.txt"
+            mkdir -p "$(dirname "$path")"
+            curl -fsSL --retry 3 -o "$path" "$src" || true
+            got=$(sha256sum "$path" 2>/dev/null | cut -d' ' -f1)
+            if [ "$got" != "$sum" ] && [ -n "$blob" ]; then
+              curl -fsSL --retry 3 -o "$path" "$B/_blob/$blob" || true
+              got=$(sha256sum "$path" 2>/dev/null | cut -d' ' -f1)
+            fi
+            if [ "$got" = "$sum" ]; then echo "ok   $path"; else echo "ERRO $path"; fail=1; fi
+          done < "$RUNNER_TEMP/lista.txt"
+          [ "$fail" = 0 ] || { echo "Arquivos nao conferem; nada foi salvo."; exit 1; }
+          printf '{}\n' > .image-slots.state.json
+          : > .nojekyll
+          set -e
+          T="$RUNNER_TEMP"
+          repo="$GITHUB_REPOSITORY"
+          : > "$T/itens.tsv"
+          for f in $(awk '{print $2}' "$T/lista.txt") .image-slots.state.json .nojekyll; do
+            base64 -w0 "$f" > "$T/b64.txt"
+            jq -n --rawfile c "$T/b64.txt" '{content: $c, encoding: "base64"}' > "$T/blob.json"
+            s=$(gh api "repos/$repo/git/blobs" --input "$T/blob.json" --jq .sha)
+            printf '%s\t%s\n' "$f" "$s" >> "$T/itens.tsv"
+          done
+          jq -Rn --arg b "$(git rev-parse 'HEAD^{tree}')" '{base_tree: $b, tree: [inputs | split("\t") | {path: .[0], mode: "100644", type: "blob", sha: .[1]}]}' < "$T/itens.tsv" > "$T/tree.json"
+          tree=$(gh api "repos/$repo/git/trees" --input "$T/tree.json" --jq .sha)
+          printf 'Adicionar arquivos do site\n\nClaude-Session: https://claude.ai/code/session_01DdagJitmhy4SJ2Vh7DcgQR\n' > "$T/msg.txt"
+          jq -n --rawfile m "$T/msg.txt" --arg t "$tree" --arg p "$(git rev-parse HEAD)" '{message: $m, tree: $t, parents: [$p]}' > "$T/commit.json"
+          novo=$(gh api "repos/$repo/git/commits" --input "$T/commit.json" --jq .sha)
+          gh api -X PATCH "repos/$repo/git/refs/heads/main" -f sha="$novo" --jq .object.sha
+          echo "Site salvo no repositorio."
