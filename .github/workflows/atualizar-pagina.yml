@@ -1,0 +1,30 @@
+name: Atualizar pagina
+on:
+  push:
+    paths:
+      - ".github/workflows/atualizar-pagina.yml"
+permissions:
+  contents: write
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Baixar, conferir e salvar a pagina
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          curl -fsSL --retry 3 -o index.html "https://871c5efc-d759-46c7-8b02-daba08b68123.frame.claudeusercontent.com/_f/1795612455-645f/export/index.html.txt"
+          echo "26905e1a4746d580706b9eda179d7190a0a31e96186a26a4ff6d54efad165b60  index.html" | sha256sum -c -
+          T="$RUNNER_TEMP"
+          repo="$GITHUB_REPOSITORY"
+          base64 -w0 index.html > "$T/b64.txt"
+          jq -n --rawfile c "$T/b64.txt" '{content: $c, encoding: "base64"}' > "$T/blob.json"
+          s=$(gh api "repos/$repo/git/blobs" --input "$T/blob.json" --jq .sha)
+          jq -n --arg b "$(git rev-parse 'HEAD^{tree}')" --arg s "$s" '{base_tree: $b, tree: [{path: "index.html", mode: "100644", type: "blob", sha: $s}]}' > "$T/tree.json"
+          tree=$(gh api "repos/$repo/git/trees" --input "$T/tree.json" --jq .sha)
+          printf 'Atualizar precos de festa e eventos\n\nClaude-Session: https://claude.ai/code/session_01DdagJitmhy4SJ2Vh7DcgQR\n' > "$T/msg.txt"
+          jq -n --rawfile m "$T/msg.txt" --arg t "$tree" --arg p "$(git rev-parse HEAD)" '{message: $m, tree: $t, parents: [$p]}' > "$T/commit.json"
+          novo=$(gh api "repos/$repo/git/commits" --input "$T/commit.json" --jq .sha)
+          gh api -X PATCH "repos/$repo/git/refs/heads/main" -f sha="$novo" --jq .object.sha
